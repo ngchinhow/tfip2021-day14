@@ -25,11 +25,12 @@ public class ContactResource {
 
     @GetMapping("/{id}")
     public String getContact(@PathVariable("id") String id, Model model) throws FileNotFoundException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-        String[] contactData = service.findById(id).split(";");
-        for (String data : contactData) {
-            String[] values = data.split("=");
-            model.addAttribute(values[0], values[1]);
-        }
+        Contact contact = service.findById(id);
+        model.addAttribute("id", contact.getId());
+        model.addAttribute("name", contact.getName());
+        model.addAttribute("email", contact.getEmail());
+        model.addAttribute("phoneNumber", contact.getPhoneNumber());
+        
         return "retrieved";
     }
 

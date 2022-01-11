@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 public class ContactsRedis implements ContactsRepo {
 
     @Autowired
-    RedisTemplate<String, String> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public void save(final Contact ctc) {
-        redisTemplate.opsForValue().set(ctc.getId(), ctc.toString());
+        redisTemplate.opsForValue().set(ctc.getId(), ctc);
     }
 
     @Override
-    public String findById(final String contactId) {
-        return redisTemplate.opsForValue().get(contactId);
+    public Contact findById(final String contactId) {
+        return (Contact) redisTemplate.opsForValue().get(contactId);
     }
 }

@@ -1,5 +1,7 @@
 package com.tfip2021.module2.config;
 
+import com.tfip2021.module2.model.Contact;
+
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,8 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
@@ -35,9 +39,8 @@ public class RedisConfig {
     private Integer redisMinIdle;
 
     @Bean
-    @Primary
     @Scope("singleton")
-    public RedisTemplate<String, String> createRedisTemplate() {
+    public RedisTemplate<String, Object> createRedisTemplate() {
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setDatabase(redisDatabase);
         config.setHostName(redisHost);
@@ -58,10 +61,13 @@ public class RedisConfig {
         );
         jedisFac.afterPropertiesSet();
 
-        final RedisTemplate<String, String> template = new RedisTemplate<>();
+        final RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(jedisFac);
         template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
+        RedisSerializer<Object> valueSerializer = new JdkSerializationRedisSerializer(
+            getClass().getClassLoader()
+        );
+        template.setValueSerializer(valueSerializer);
         return template;
     }
 }

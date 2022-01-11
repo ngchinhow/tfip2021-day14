@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Contact implements Serializable {
     private static final int ID_LENGTH = 8;
+    private static final long serialVersionUID = 44848422710L;
 
     private String id;
     private String name;
@@ -35,12 +36,4 @@ public class Contact implements Serializable {
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-
-    @Override
-    public String toString() {
-        return "id=" + getId() + ";" +
-            "name=" + getName() + ";" +
-            "email=" + getEmail() + ";" +
-            "phoneNumber=" + getPhoneNumber();
-    }
 }
