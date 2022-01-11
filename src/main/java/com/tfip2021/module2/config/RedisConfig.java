@@ -1,12 +1,9 @@
 package com.tfip2021.module2.config;
 
-import com.tfip2021.module2.model.Contact;
-
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -19,14 +16,13 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
 @Configuration
+@Scope("singleton")
 public class RedisConfig {
 
     @Value("${spring.redis.database}")
     private Integer redisDatabase;
     @Value("${spring.redis.host}")
     private String redisHost;
-    @Value("${spring.redis.username}")
-    private String redisUsername;
     @Value("${spring.redis.password}")
     private String redisPassword;
     @Value("${spring.redis.port}")
@@ -39,13 +35,11 @@ public class RedisConfig {
     private Integer redisMinIdle;
 
     @Bean
-    @Scope("singleton")
     public RedisTemplate<String, Object> createRedisTemplate() {
         final RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setDatabase(redisDatabase);
         config.setHostName(redisHost);
         config.setPort(redisPort);
-        config.setUsername(redisUsername);
         config.setPassword(RedisPassword.of(redisPassword));
         System.out.println(redisPassword);
 
